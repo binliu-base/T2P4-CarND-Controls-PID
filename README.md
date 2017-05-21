@@ -51,10 +51,4 @@ Final parameters were: P = 0.1 I = 0.001 D = 1.5
 
 ## Discussion
 
-This is a fun project, Which surprised me how simple and powerful a one line equation can help us smoothly drive the car in the simulator. This is an initial version of PID controller, 
-We may add automated PID parameters tuning and Speed PID controller features in the real world.
-
-
-
-
-
+This is a fun project that surprise me how simple and powerful a one line equation can help us smoothly drive the car in the simulator. This is an initial version of PID controller, We may need add automated PID parameters tuning and Speed PID controller features in the real world.
