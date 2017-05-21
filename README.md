@@ -6,7 +6,7 @@ Self-Driving Car Engineer Nanodegree Program
 # Overview
 The goals / steps of this project are the following:  
 
-* Complete PID controller (steer angle) in C++.
+* Complete PID controller (steering angle) in C++.
 * Tune PID controller parameters 
 * Test PID controller on the simulator and make sure the vehicle is able to drive successfully around the track.
 
