@@ -3,82 +3,58 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
-## Dependencies
+# Overview
+The goals / steps of this project are the following:  
 
-* cmake >= 3.5
- * All OSes: [click here for installation instructions](https://cmake.org/install/)
-* make >= 4.1
-  * Linux: make is installed by default on most Linux distros
-  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-* gcc/g++ >= 5.4
-  * Linux: gcc / g++ is installed by default on most Linux distros
-  * Mac: same deal as make - [install Xcode command line tools]((https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
-* [uWebSockets](https://github.com/uWebSockets/uWebSockets) == 0.13, but the master branch will probably work just fine
-  * Follow the instructions in the [uWebSockets README](https://github.com/uWebSockets/uWebSockets/blob/master/README.md) to get setup for your platform. You can download the zip of the appropriate version from the [releases page](https://github.com/uWebSockets/uWebSockets/releases). Here's a link to the [v0.13 zip](https://github.com/uWebSockets/uWebSockets/archive/v0.13.0.zip).
-  * If you run OSX and have homebrew installed you can just run the ./install-mac.sh script to install this
-* Simulator. You can download these from the [project intro page](https://github.com/udacity/CarND-PID-Control-Project/releases) in the classroom.
+* Complete PID controller (steer angle) in C++.
+* Tune PID controller parameters 
+* Test PID controller on the simulator and make sure the vehicle is able to drive successfully around the track.
 
-## Basic Build Instructions
+### Final Result
+[Here] is the video that demonstrates the vehicle controlled by the PID controller successfully drives around the track in the simulator. 
 
-1. Clone this repo.
-2. Make a build directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it: `./pid`. 
+## PID Components 
 
-## Editor Settings
+PID is compose of three types controllers. 
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+P - proportional controller direct reduce next cross track error. While only using P controller is not enough for effective car driving, the car will overshoot and drive off track very quickly.
 
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
+D - derivative controller is use to reduce the oscillation problems in P controller.
 
-## Code Style
+I - integral controller is use to eliminate system bias problem in PD controller. 
 
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
+The input of PID is Cross Track Error that specifies how far away the car is away from the intended driving route (center of the road), The output is the appropriate steering angle that controls the car driving.
 
-## Project Instructions and Rubric
+The equation of steering angle compuation as below:
 
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
+steering_angle = -tau_p * cte - tau_d * diff_cte - tau_i * int_cte 
 
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
-for instructions and the project rubric.
+tau_p * cte : Proportional Controller  
+tau_d * diff_cte: Differential Controller  
+tau_i * int_cte:  Integral Controller  
 
-## Hints!
 
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
+## PID hyperparameter tuning
+Final hyperparameters for submission was tuned manually. 
 
-## Call for IDE Profiles Pull Requests
+1.  First, I started by setting all PID coefficients to a value of 0. With this configuration, the car would drive completely straight with no error response.
 
-Help your fellow students!
+2. Then increase the P term (tau_p) until the output of the loop oscillates,
+(with I and D set to 0 coefficient). Note, if tau_p was set too low, car was not able to steer back to the centerline. While when the value was too high, oscillations will increased and the car will run out of track finally.
 
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
+2. Then increase D term (tau_d), if required, until the loop is acceptably quick to reach its reference after a load disturbance. 
 
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
 
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
+2. Finally, increase I term (tau_i) until any offset is corrected in sufficient time for the process. Note, tau_i can be set to in the case, because system bias is 0 in the simulator. 
 
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
+Final parameters were: P = 0.1 I = 0.001 D = 1.5
 
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
+## Discussion
 
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
+This is a fun project, Which surprised me how simple and powerful a one line equation can help us smoothly drive the car in the simulator. This is an initial version of PID controller, 
+We may add automated PID parameters tuning and Speed PID controller features in the real world.
+
+
+
+
+
